@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Scroll Snap Controls Demo</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="gallery">
+        <ul class="gallery-wrapper">
+            <li>Slide 1</li>
+            <li>Slide 2</li>
+            <li>Slide 3</li>
+            <li>Slide 4</li>
+            <li>Slide 5</li>
+            <li>Slide 6</li>
+            <li>Slide 7</li>
+        </ul>
+        <div class="gallery-nav">
+            <button type="button" class="gallery-nav-previous">Previous</button>
+            <button type="button" class="gallery-nav-next">Next</button>
+        </div>
+    </div>
+
+    <script src="./index.js"></script>
+    <script>
+        const galleryWrapper = document.querySelector('.gallery');
+        const gallery = new ScrollSnapControls(galleryWrapper);
+    </script>
+</body>
+
+</html>
