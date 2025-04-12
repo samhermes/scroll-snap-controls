@@ -15,14 +15,25 @@ let settings = {
 }
 
 let elements = [];
+let visibleElements = 0;
 let intersectionObserver = null;
-let activeIndex = 0;
+let activeIndex = 1;
+let throttleTimer;
+
+const throttle = (callback, time) => {
+    if (throttleTimer) return;
+    throttleTimer = true;
+    setTimeout(() => {
+        callback();
+        throttleTimer = false;
+    }, time);
+}
 
 const start = () => {
     intersectionObserver = new IntersectionObserver(handleIntersect, {
         root: document.querySelector(settings.selector),
         rootMargin: "0px",
-        threshold: 0.75
+        threshold: 1.0,
     });
 
     elements = document.querySelectorAll(settings.elementSelector);
@@ -36,6 +47,10 @@ const start = () => {
     }
 
     attachNavHandlers();
+
+    window.addEventListener('resize', () => {
+        throttle(handleResizeEvent, 250);
+    }, true);
 }
 
 // Set up buttons, if enabled
@@ -71,43 +86,62 @@ const hasReducedMotion = () => {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-// Calculate taking in scroll offset and padding/gap
-// Can we do this using the initial count of intersection observer?
-const getRowLength = () => {
-    const container = document.querySelector(settings.wrapper);
-
-    return Math.floor(
-        container.clientWidth /
-        elements[0].clientWidth
-    );
-};
-
 const handleIntersect = (entries) => {
     const entry = entries.find(e => e.isIntersecting);
     const elementsArray = Array.from(elements);
+
+    const allIntersecting = entries.filter(e => e.isIntersecting === true);
+    if (visibleElements === 0) {
+        visibleElements = allIntersecting.length - 1;
+    }
 
     if (entry) {
         const index = elementsArray.findIndex(
             e => e === entry.target
         );
-        activeIndex = index;
+        activeIndex = index === 0 ? 1 : index;
     }
 }
 
-// Only do smooth scroll if reduced motion is on
+const handleResizeEvent = () => {
+    let count = 0;
+
+    elements.forEach((element) => {
+        const isVisible = elementIsVisibleInViewport(element);
+        if (isVisible) {
+            count++;
+        }
+    });
+
+    visibleElements = count - 1;
+}
+
+const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
+    const { top, left, bottom, right } = el.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return partiallyVisible
+        ? ((top > 0 && top < innerHeight) ||
+            (bottom > 0 && bottom < innerHeight)) &&
+        ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
+        : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+};
+
 const scrollToNextPage = () => {
     if (activeIndex < elements.length - 1) {
-        elements[Math.min(activeIndex + (getRowLength() * 2), elements.length - 1)].scrollIntoView({
+        elements[Math.min(activeIndex + visibleElements, elements.length - 1)].scrollIntoView({
+            // Only do smooth scroll if reduced motion is on
             behavior: hasReducedMotion() ? undefined : 'smooth',
+            inline: 'start',
         })
     }
 }
 
-// Only do smooth scroll if reduced motion is on
 const scrollToPrevPage = () => {
     if (activeIndex > 0) {
-        elements[Math.max(0, activeIndex - (getRowLength() * 2))].scrollIntoView({
+        elements[Math.max(0, activeIndex - visibleElements)].scrollIntoView({
+            // Only do smooth scroll if reduced motion is on
             behavior: hasReducedMotion() ? undefined : 'smooth',
+            inline: 'end',
         })
     }
 }
