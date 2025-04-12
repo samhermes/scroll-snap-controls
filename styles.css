@@ -4,12 +4,12 @@ body {
     margin: 0;
 }
 
-.gallery {
+.scroll-snap-container {
     position: relative;
     padding-top: 4rem;
 }
 
-.gallery-wrapper {
+.scroll-snap-wrapper {
     column-gap: 3rem;
     display: flex;
     list-style: none;
@@ -19,9 +19,15 @@ body {
     position: relative;
     scroll-snap-type: x mandatory;
     scroll-padding: 3rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-.gallery-wrapper li {
+.scroll-snap-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-snap-wrapper li {
     align-items: center;
     aspect-ratio: 1 / 1;
     background: gainsboro;

@@ -11,8 +11,8 @@
 </head>
 
 <body>
-    <div class="gallery">
-        <ul class="gallery-wrapper">
+    <div class="scroll-snap-container">
+        <ul class="scroll-snap-wrapper">
             <li>Slide 1</li>
             <li>Slide 2</li>
             <li>Slide 3</li>
@@ -21,17 +21,13 @@
             <li>Slide 6</li>
             <li>Slide 7</li>
         </ul>
-        <div class="gallery-nav">
-            <button type="button" class="gallery-nav-previous">Previous</button>
-            <button type="button" class="gallery-nav-next">Next</button>
-        </div>
     </div>
 
     <script src="./index.js"></script>
-    <script>
+    <!-- <script>
         const galleryWrapper = document.querySelector('.gallery');
-        const gallery = new ScrollSnapControls(galleryWrapper);
-    </script>
+        new ScrollSnapControls(galleryWrapper);
+    </script> -->
 </body>
 
 </html>
