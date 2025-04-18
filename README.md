@@ -35,10 +35,10 @@ If you'd like to offset the elements from the edge of the viewport, a combinatio
 
 If you'd prefer to use your own markup, you can adjust the following settings as needed. Additionally, you can disable the default navigation controls and substitute your own.
 
-| Name             | Default                     | Description                               |
-| ---------------- | --------------------------- | ----------------------------------------- |
-| container        | `.scroll-snap-container`    | Outer element, scroll area.               |
-| elementSelector  | `.scroll-snap-container li` | Individual elements inside the container. |
-| previousSelector | `.scroll-snap-nav-previous` | The previous page button.                 |
-| nextSelector     | `.scroll-snap-nav-next`     | The next page button.                     |
-| addControls      | `true`                      | Output next and previous buttons.         |
+| Name               | Default                     | Description                               |
+| ------------------ | --------------------------- | ----------------------------------------- |
+| `container`        | `.scroll-snap-container`    | Outer element, scroll area.               |
+| `elementSelector`  | `.scroll-snap-container li` | Individual elements inside the container. |
+| `previousSelector` | `.scroll-snap-nav-previous` | The previous page button.                 |
+| `nextSelector`     | `.scroll-snap-nav-next`     | The next page button.                     |
+| `addControls`      | `true`                      | Output next and previous buttons.         |
