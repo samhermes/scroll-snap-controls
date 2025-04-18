@@ -16,10 +16,12 @@ let settings = {
 
 let elements = [];
 let visibleElements = 0;
-let intersectionObserver = null;
 let activeIndex = 0;
 let throttleTimer;
 
+/*
+ * A basic throttle function, used to limit function calls in resize event.
+ */
 const throttle = (callback, time) => {
     if (throttleTimer) return;
     throttleTimer = true;
@@ -29,31 +31,36 @@ const throttle = (callback, time) => {
     }, time);
 }
 
+/*
+ * Check if the passed element is currently visible in the viewport.
+ */
+const elementIsVisibleInViewport = (element) => {
+    const { top, left, bottom, right } = element.getBoundingClientRect();
+    const { innerHeight, innerWidth } = window;
+    return top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+};
+
+/*
+ * Set up initial functionality.
+ */
 const start = () => {
-    intersectionObserver = new IntersectionObserver(handleIntersect, {
-        root: document.querySelector(settings.selector),
-        rootMargin: "0px",
-        threshold: 1.0,
-    });
-
     elements = document.querySelectorAll(settings.elementSelector);
-
-    elements.forEach(el => {
-        intersectionObserver.observe(el);
-    });
 
     if (settings.addControls) {
         setUpButtons();
     }
 
     attachNavHandlers();
+    calculateVisibleElements();
 
     window.addEventListener('resize', () => {
-        throttle(handleResizeEvent, 250);
+        throttle(calculateVisibleElements, 250);
     }, true);
 }
 
-// Set up buttons, if enabled
+/*
+ * Create and add navigation buttons to container.
+ */
 const setUpButtons = () => {
     const container = document.querySelector(settings.container);
 
@@ -76,34 +83,25 @@ const setUpButtons = () => {
     container.appendChild(navigation);
 }
 
+/*
+ * Give functionality to navigation buttons, whether default or custom.
+ */
 const attachNavHandlers = () => {
     document.querySelector(settings.previousSelector).addEventListener('click', scrollToPrevPage);
     document.querySelector(settings.nextSelector).addEventListener('click', scrollToNextPage);
 }
 
-// Determine if user has reduced motion enabled.
+/*
+ * Determine if the user has reduced motion enabled.
+ */
 const hasReducedMotion = () => {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-const handleIntersect = (entries) => {
-    const entry = entries.find(e => e.isIntersecting);
-    const elementsArray = Array.from(elements);
-
-    const allIntersecting = entries.filter(e => e.isIntersecting === true);
-    if (visibleElements === 0) {
-        visibleElements = allIntersecting.length - 1;
-    }
-
-    if (entry) {
-        const index = elementsArray.findIndex(
-            e => e === entry.target
-        );
-        activeIndex = index;
-    }
-}
-
-const handleResizeEvent = () => {
+/*
+ * Check to see how many elements are currently visible in the viewport.
+ */
+const calculateVisibleElements = () => {
     let count = 0;
 
     elements.forEach((element) => {
@@ -113,19 +111,12 @@ const handleResizeEvent = () => {
         }
     });
 
-    visibleElements = count - 1;
+    visibleElements = count;
 }
 
-const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
-    const { top, left, bottom, right } = el.getBoundingClientRect();
-    const { innerHeight, innerWidth } = window;
-    return partiallyVisible
-        ? ((top > 0 && top < innerHeight) ||
-            (bottom > 0 && bottom < innerHeight)) &&
-        ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
-        : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
-};
-
+/*
+ * Scroll the container to the next set of elements.
+ */
 const scrollToNextPage = () => {
     if (activeIndex < elements.length - 1) {
         elements[Math.min(activeIndex + visibleElements, elements.length - 1)].scrollIntoView({
@@ -133,19 +124,27 @@ const scrollToNextPage = () => {
             behavior: hasReducedMotion() ? undefined : 'smooth',
             inline: 'start',
         })
+        activeIndex = activeIndex + visibleElements;
     }
 }
 
+/*
+ * Scroll the container to the previous set of elements.
+ */
 const scrollToPrevPage = () => {
     if (activeIndex > 0) {
         elements[Math.max(0, activeIndex - visibleElements)].scrollIntoView({
             // Only do smooth scroll if reduced motion is on
             behavior: hasReducedMotion() ? undefined : 'smooth',
-            inline: 'end',
+            inline: 'start',
         })
+        activeIndex = activeIndex - visibleElements;
     }
 }
 
+/*
+ * Override any default settings.
+ */
 const updateSettings = (newSettings) => {
     if (newSettings && newSettings !== settings) {
         settings = {
@@ -155,6 +154,9 @@ const updateSettings = (newSettings) => {
     }
 }
 
+/*
+ * Get things going.
+ */
 const init = (settings) => {
     updateSettings(settings);
 
