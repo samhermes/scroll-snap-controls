@@ -1,9 +1,10 @@
 /**
  * Add navigation buttons to scroll snap container
- *
- * @param {*} element The container element.
  */
 
+/*
+ * Default settings.
+ */
 let settings = {
     container: '.scroll-snap-container',
     wrapper: '.scroll-snap-wrapper',
@@ -14,9 +15,24 @@ let settings = {
     paginated: true,
 }
 
+/*
+ * Array of elements present in the container.
+ */
 let elements = [];
+
+/*
+ * Currently visible elements in the viewport.
+ */
 let visibleElements = 0;
+
+/*
+ * Left-most element.
+ */
 let activeIndex = 0;
+
+/*
+ * Flag to allow throttle to continue.
+ */
 let throttleTimer;
 
 /*
