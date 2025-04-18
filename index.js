@@ -17,7 +17,7 @@ let settings = {
 let elements = [];
 let visibleElements = 0;
 let intersectionObserver = null;
-let activeIndex = 1;
+let activeIndex = 0;
 let throttleTimer;
 
 const throttle = (callback, time) => {
@@ -99,7 +99,7 @@ const handleIntersect = (entries) => {
         const index = elementsArray.findIndex(
             e => e === entry.target
         );
-        activeIndex = index === 0 ? 1 : index;
+        activeIndex = index;
     }
 }
 
