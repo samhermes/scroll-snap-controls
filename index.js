@@ -7,12 +7,10 @@
  */
 let settings = {
     container: '.scroll-snap-container',
-    wrapper: '.scroll-snap-wrapper',
     elementSelector: '.scroll-snap-container li',
     previousSelector: '.scroll-snap-nav-previous',
     nextSelector: '.scroll-snap-nav-next',
     addControls: true,
-    paginated: true,
 }
 
 /*
