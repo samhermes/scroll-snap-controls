@@ -51,6 +51,13 @@ If you'd prefer to use your own markup, you can adjust the following settings as
 | `nextSelector`     | `.scroll-snap-nav-next`     | The next page button.                     |
 | `addControls`      | `true`                      | Output next and previous buttons.         |
 
+Pass these during initialization as an object:
+
+```js
+scrollSnapControls({
+    container: '.scroll-snap-custom',
+});
+```
 
 ## Advanced Usage
 ### Control the navigation
