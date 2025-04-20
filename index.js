@@ -175,6 +175,11 @@ const init = (settings) => {
     updateSettings(settings);
 
     start();
+
+    return {
+        scrollToNextPage,
+        scrollToPrevPage,
+    };
 }
 
-init();
+export default init;

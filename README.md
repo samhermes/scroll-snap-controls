@@ -10,6 +10,14 @@ Install the package from GitHub using npm in your project:
 npm install samhermes/scroll-snap-controls#1.0.0
 ```
 
+Initialize the package by importing and calling the default function:
+
+```js
+import scrollSnapControls from 'scroll-snap-controls';
+
+scrollSnapControls();
+```
+
 By default, the package looks for an element on the page using `.scroll-snap-container`, and selects the child elements using an `li` selector. The element need to use the following markup structure to support this:
 
 ```html
@@ -42,3 +50,16 @@ If you'd prefer to use your own markup, you can adjust the following settings as
 | `previousSelector` | `.scroll-snap-nav-previous` | The previous page button.                 |
 | `nextSelector`     | `.scroll-snap-nav-next`     | The next page button.                     |
 | `addControls`      | `true`                      | Output next and previous buttons.         |
+
+
+## Advanced Usage
+### Control the navigation
+
+The navigation functions are accessible outside of the package. Assign the initialization function to a variable and call the appropriate function as needed.
+
+```js
+const scrollContainer = scrollSnapControls();
+
+scrollContainer.scrollToNextPage();
+scrollContainer.scrollToPrevPage();
+```
