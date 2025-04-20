@@ -1,0 +1,19 @@
+{
+  "name": "scroll-snap-controls",
+  "version": "1.0.0",
+  "description": "Add navigation buttons to scroll snap container",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samhermes/scroll-snap-controls.git"
+  },
+  "author": "Sam Hermes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samhermes/scroll-snap-controls/issues"
+  },
+  "homepage": "https://github.com/samhermes/scroll-snap-controls#readme"
+}
